@@ -1,0 +1,54 @@
+{
+  "users": [
+    {
+      "email": "olivier@mail.com",
+      "password": "$2a$10$pqbsYS4WKcR3zYDFPufZ7O/X1TlQ2Ssy1uQt/kv9wjbfG8MlP31Zi",
+      "id": 1
+    },
+    {
+      "email": "pepito@gmail.com",
+      "password": "$2a$10$kO1exe5YAj8zWwEGlN1XUu1.e9kbex4NCUvHc5JCOzY8xL5l4S0gy",
+      "id": 2
+    },
+    {
+      "email": "olivierUUUU@mail.com",
+      "password": "$2a$10$eVfsuKqqNl3ziJ59QCtgj.sFHtiIkHOwneXDeK6K3yY50lC3aNFAG",
+      "id": 3
+    }
+  ],
+  "tipo-documentos": [
+    {
+      "id": "1",
+      "sigla": "CC",
+      "nombre_documento": "cédula de ciudadanía"
+    },
+    {
+      "id": "2",
+      "sigla": "CE",
+      "nombre_documento": "cédula de extranjería"
+    },
+    {
+      "sigla": "NIT",
+      "nombre_documento": "Numero de identificación tributaria",
+      "id": "0tysNJ1"
+    }
+  ],
+  "jornada": [
+    {
+      "id": 1,
+      "sigla_jornada": "D",
+      "nombre_jornada": "Jornada Diurna",
+      "descripcion": "lunes a viernes de 6:00 a.m. a 6:00 p.m.",
+      "imagen_url": null,
+      "estado": "ACTIVO"
+    },
+    {
+      "id": 2,
+      "sigla_jornada": "N",
+      "nombre_jornada": "Jornada nocturna",
+      "descripcion": "lunes a viernes de 6:00 p.m. a 10:00 p.m.",
+      "imagen_url": null,
+      "estado": "INACTIVO"
+    }
+  ]
+}
