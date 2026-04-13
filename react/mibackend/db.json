@@ -38,21 +38,8 @@
   ],
   "vehiculos_completo": [
     {
-      "tipo": "moto",
-      "id_centro_de_formacion": 2,
-      "marca": "Yamaha",
-      "color": "verde",
-      "serial": "MOTO789",
-      "placa": "XYZ123",
-      "cilindraje": "200cc",
-      "modelo": "2023",
-      "foto_principal": "",
-      "foto_secundaria": "",
-      "id": 2
-    },
-    {
       "tipo": "bicicleta",
-      "id_centro_de_formacion": "2",
+      "id_centro_de_formacion": "3",
       "marca": "ROCA",
       "color": "Negro",
       "serial": "BICI456",

@@ -30,7 +30,7 @@ export default function Navbar() {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <strong>Mi App</strong>
+        <strong>SenaParking</strong>
 
         <NavLink to="/" style={linkStyle}>
           Inicio

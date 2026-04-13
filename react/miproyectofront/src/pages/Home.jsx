@@ -35,6 +35,9 @@ export default function Home() {
         <li>
           <Link to="/tipo-documentos">Ir a CRUD Tipo Documentos</Link>
         </li>
+        <li>
+          <Link to="/vehiculos">Ir a vehiculos</Link>
+        </li>
       </ul>
     </div>
   );
