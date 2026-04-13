@@ -44,6 +44,9 @@ export default function Navbar() {
         <NavLink to="/tipo-documentos" style={linkStyle}>
           Tipo Documentos
         </NavLink>
+        <NavLink to="/vehiculos" style={linkStyle}>
+          Vehículos
+        </NavLink>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>

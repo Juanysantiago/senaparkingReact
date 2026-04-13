@@ -50,5 +50,24 @@
       "imagen_url": null,
       "estado": "INACTIVO"
     }
-  ]
+  ],
+  "vehiculo": [
+    {
+      "id_vehiculo": 1,
+      "id_tipo_vehiculo": 1,
+      "id_centro_de_formacion": 1
+    }
+  ],
+  "bicicleta": [
+    {
+      "id_bicicleta": 1,
+      "id_vehiculo": 1,
+      "foto_de_la_bicicleta": "https://ejemplo.com/bici1.jpg",
+      "foto_serial_bicicleta": "https://ejemplo.com/serial1.jpg",
+      "marca_de_la_bicicleta": "GW",
+      "color_de_la_bicicleta": "Rojo",
+      "serial_de_la_bicicleta": "BICI123456"
+    }
+  ],
+  "moto": []
 }
