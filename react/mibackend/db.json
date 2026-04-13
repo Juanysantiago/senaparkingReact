@@ -1,19 +1,9 @@
 {
   "users": [
     {
-      "email": "olivier@mail.com",
-      "password": "$2a$10$pqbsYS4WKcR3zYDFPufZ7O/X1TlQ2Ssy1uQt/kv9wjbfG8MlP31Zi",
+      "email": "angel@gmail.com",
+      "password": "$2a$10$O7BUzbBvcuip3YVJlO7zuOsfRJ/.ov5/E9IqPgDub4YwOWrr4.SLO",
       "id": 1
-    },
-    {
-      "email": "pepito@gmail.com",
-      "password": "$2a$10$kO1exe5YAj8zWwEGlN1XUu1.e9kbex4NCUvHc5JCOzY8xL5l4S0gy",
-      "id": 2
-    },
-    {
-      "email": "olivierUUUU@mail.com",
-      "password": "$2a$10$eVfsuKqqNl3ziJ59QCtgj.sFHtiIkHOwneXDeK6K3yY50lC3aNFAG",
-      "id": 3
     }
   ],
   "tipo-documentos": [
@@ -47,19 +37,6 @@
     }
   ],
   "vehiculos_completo": [
-    {
-      "tipo": "bicicleta",
-      "id_centro_de_formacion": 1,
-      "marca": "PROFIT",
-      "color": "verde",
-      "serial": "BICI123",
-      "placa": "",
-      "cilindraje": "",
-      "modelo": "",
-      "foto_principal": "",
-      "foto_secundaria": "",
-      "id": 1
-    },
     {
       "tipo": "moto",
       "id_centro_de_formacion": 2,

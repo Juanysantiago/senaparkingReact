@@ -2,8 +2,8 @@ import { useState } from "react";
 import { axiosClient } from "../api/axiosClient";
 
 export default function Login() {
-  const [email, setEmail] = useState("olivier@mail.com");
-  const [password, setPassword] = useState("bestPassw0rd");
+  const [email, setEmail] = useState("angel@gmail.com");
+  const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
