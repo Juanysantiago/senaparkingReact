@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosClient = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://laughing-journey-jj444rxjgpq9fqpj6-3000.app.github.dev/",
   headers: {
     "Content-Type": "application/json",
   },
