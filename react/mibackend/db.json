@@ -26,11 +26,6 @@
       "id": "2",
       "sigla": "CE",
       "nombre_documento": "cédula de extranjería"
-    },
-    {
-      "sigla": "NIT",
-      "nombre_documento": "Numero de identificación tributaria",
-      "id": "0tysNJ1"
     }
   ],
   "jornada": [
@@ -51,23 +46,45 @@
       "estado": "INACTIVO"
     }
   ],
-  "vehiculo": [
+  "vehiculos_completo": [
     {
-      "id_vehiculo": 1,
-      "id_tipo_vehiculo": 1,
-      "id_centro_de_formacion": 1
-    }
-  ],
-  "bicicleta": [
+      "tipo": "bicicleta",
+      "id_centro_de_formacion": 1,
+      "marca": "PROFIT",
+      "color": "verde",
+      "serial": "BICI123",
+      "placa": "",
+      "cilindraje": "",
+      "modelo": "",
+      "foto_principal": "",
+      "foto_secundaria": "",
+      "id": 1
+    },
     {
-      "id_bicicleta": 1,
-      "id_vehiculo": 1,
-      "foto_de_la_bicicleta": "https://ejemplo.com/bici1.jpg",
-      "foto_serial_bicicleta": "https://ejemplo.com/serial1.jpg",
-      "marca_de_la_bicicleta": "GW",
-      "color_de_la_bicicleta": "Rojo",
-      "serial_de_la_bicicleta": "BICI123456"
+      "tipo": "moto",
+      "id_centro_de_formacion": 2,
+      "marca": "Yamaha",
+      "color": "verde",
+      "serial": "MOTO789",
+      "placa": "XYZ123",
+      "cilindraje": "200cc",
+      "modelo": "2023",
+      "foto_principal": "",
+      "foto_secundaria": "",
+      "id": 2
+    },
+    {
+      "tipo": "bicicleta",
+      "id_centro_de_formacion": "2",
+      "marca": "ROCA",
+      "color": "Negro",
+      "serial": "BICI456",
+      "placa": "",
+      "cilindraje": "",
+      "modelo": "",
+      "foto_principal": "",
+      "foto_secundaria": "",
+      "id": 3
     }
-  ],
-  "moto": []
+  ]
 }

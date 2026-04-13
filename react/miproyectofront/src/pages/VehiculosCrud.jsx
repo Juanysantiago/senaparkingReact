@@ -1,7 +1,6 @@
+// /src/pages/VehiculosCrud.jsx - VERSIÓN SIMPLIFICADA QUE SÍ FUNCIONA
 import { useEffect, useState } from "react";
 import { vehiculosApi } from "../api/vehiculosApi";
-import BicicletaForm from "../components/BicicletaForm";
-import MotoForm from "../components/MotoForm";
 
 export default function VehiculosCrud() {
   const [items, setItems] = useState([]);
@@ -9,16 +8,29 @@ export default function VehiculosCrud() {
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
-  const [tipoVehiculo, setTipoVehiculo] = useState("bicicleta");
   const [searchId, setSearchId] = useState("");
   const [searchResult, setSearchResult] = useState(null);
+
+  // Estado del formulario
+  const [formData, setFormData] = useState({
+    tipo: "bicicleta",
+    id_centro_de_formacion: "",
+    marca: "",
+    color: "",
+    serial: "",
+    placa: "",
+    cilindraje: "",
+    modelo: "",
+    foto_principal: "",
+    foto_secundaria: ""
+  });
 
   const loadVehiculos = async () => {
     setLoading(true);
     setError("");
     try {
-      const data = await vehiculosApi.getVehiculosConDetalles();
-      setItems(data);
+      const res = await vehiculosApi.list();
+      setItems(res.data);
     } catch (err) {
       setError("Error cargando vehículos: " + (err.message || "Error desconocido"));
     } finally {
@@ -30,66 +42,91 @@ export default function VehiculosCrud() {
     loadVehiculos();
   }, []);
 
-  const handleSubmit = async (formData) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const openCreateForm = () => {
+    setEditingItem(null);
+    setFormData({
+      tipo: "bicicleta",
+      id_centro_de_formacion: "",
+      marca: "",
+      color: "",
+      serial: "",
+      placa: "",
+      cilindraje: "",
+      modelo: "",
+      foto_principal: "",
+      foto_secundaria: ""
+    });
+    setShowForm(true);
+  };
+
+  const openEditForm = (item) => {
+    setEditingItem(item);
+    setFormData({
+      tipo: item.tipo,
+      id_centro_de_formacion: item.id_centro_de_formacion,
+      marca: item.marca,
+      color: item.color,
+      serial: item.serial,
+      placa: item.placa || "",
+      cilindraje: item.cilindraje || "",
+      modelo: item.modelo || "",
+      foto_principal: item.foto_principal || "",
+      foto_secundaria: item.foto_secundaria || ""
+    });
+    setShowForm(true);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
+    setError("");
+    
+    // Validaciones básicas
+    if (!formData.marca || !formData.serial || !formData.id_centro_de_formacion) {
+      setError("Marca, serial y centro de formación son obligatorios");
+      setLoading(false);
+      return;
+    }
+    
+    if (formData.tipo === "moto" && !formData.placa) {
+      setError("La placa es obligatoria para motos");
+      setLoading(false);
+      return;
+    }
+    
     try {
       if (editingItem) {
-        // Actualizar vehículo base
-        await vehiculosApi.update(editingItem.id_vehiculo, {
-          id_tipo_vehiculo: formData.tipo === "bicicleta" ? 1 : 2,
-          id_centro_de_formacion: formData.id_centro_de_formacion
-        });
-        
-        // Actualizar detalles según tipo
-        if (formData.tipo === "bicicleta") {
-          await vehiculosApi.updateBicicleta(editingItem.detalles?.id_bicicleta, formData);
-        } else {
-          await vehiculosApi.updateMoto(editingItem.detalles?.id_moto, formData);
-        }
+        // Actualizar
+        await vehiculosApi.update(editingItem.id, formData);
+        alert("Vehículo actualizado exitosamente");
       } else {
-        // Crear nuevo vehículo
-        const vehiculoData = {
-          id_tipo_vehiculo: formData.tipo === "bicicleta" ? 1 : 2,
-          id_centro_de_formacion: formData.id_centro_de_formacion
-        };
-        const vehiculoRes = await vehiculosApi.create(vehiculoData);
-        
-        // Crear detalles según tipo
-        if (formData.tipo === "bicicleta") {
-          await vehiculosApi.createBicicleta({
-            id_vehiculo: vehiculoRes.data.id_vehiculo,
-            ...formData
-          });
-        } else {
-          await vehiculosApi.createMoto({
-            id_vehiculo: vehiculoRes.data.id_vehiculo,
-            ...formData
-          });
-        }
+        // Crear nuevo
+        await vehiculosApi.create(formData);
+        alert("Vehículo creado exitosamente");
       }
       
       setShowForm(false);
       setEditingItem(null);
       await loadVehiculos();
-      alert(`Vehículo ${editingItem ? "actualizado" : "creado"} exitosamente`);
+      
     } catch (err) {
-      setError("Error guardando vehículo: " + (err.message || "Error desconocido"));
+      console.error("Error:", err);
+      setError("Error guardando vehículo: " + (err.response?.data?.message || err.message || "Error desconocido"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (item) => {
-    if (!window.confirm(`¿Eliminar vehículo ID ${item.id_vehiculo}?`)) return;
+    if (!window.confirm(`¿Eliminar vehículo "${item.marca}" (ID: ${item.id})?`)) return;
     
     setLoading(true);
     try {
-      if (item.tipo === "bicicleta" && item.detalles) {
-        await vehiculosApi.deleteBicicleta(item.detalles.id_bicicleta);
-      } else if (item.tipo === "moto" && item.detalles) {
-        await vehiculosApi.deleteMoto(item.detalles.id_moto);
-      }
-      await vehiculosApi.remove(item.id_vehiculo);
+      await vehiculosApi.remove(item.id);
       await loadVehiculos();
       alert("Vehículo eliminado exitosamente");
     } catch (err) {
@@ -107,25 +144,10 @@ export default function VehiculosCrud() {
     
     setLoading(true);
     try {
-      const vehiculo = await vehiculosApi.getById(searchId);
-      let detalles = null;
-      let tipo = "";
-      
-      try {
-        const bicicletas = await vehiculosApi.getBicicletas();
-        detalles = bicicletas.data.find(b => b.id_vehiculo === parseInt(searchId));
-        if (detalles) tipo = "bicicleta";
-      } catch {}
-      
-      if (!detalles) {
-        const motos = await vehiculosApi.getMotos();
-        detalles = motos.data.find(m => m.id_vehiculo === parseInt(searchId));
-        if (detalles) tipo = "moto";
-      }
-      
-      setSearchResult({ ...vehiculo.data, detalles, tipo });
+      const res = await vehiculosApi.getById(searchId);
+      setSearchResult(res.data);
     } catch (err) {
-      setError("No se encontró el vehículo");
+      setError("No se encontró el vehículo con ID " + searchId);
       setSearchResult(null);
     } finally {
       setLoading(false);
@@ -137,11 +159,8 @@ export default function VehiculosCrud() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
         <h2>Gestión de Vehículos</h2>
         <button 
-          onClick={() => {
-            setEditingItem(null);
-            setShowForm(true);
-          }}
-          style={{ padding: "10px 20px", background: "#007bff", color: "white", border: "none", borderRadius: 5 }}
+          onClick={openCreateForm}
+          style={{ padding: "10px 20px", background: "#007bff", color: "white", border: "none", borderRadius: 5, cursor: "pointer" }}
         >
           + Nuevo Vehículo
         </button>
@@ -149,7 +168,7 @@ export default function VehiculosCrud() {
 
       {error && (
         <div style={{ background: "#f8d7da", color: "#721c24", padding: 10, borderRadius: 5, marginBottom: 20 }}>
-          {error}
+          ❌ {error}
         </div>
       )}
 
@@ -164,7 +183,7 @@ export default function VehiculosCrud() {
             placeholder="ID del vehículo"
             style={{ flex: 1, padding: 8, border: "1px solid #ddd", borderRadius: 4 }}
           />
-          <button onClick={searchById} style={{ padding: "8px 20px" }}>
+          <button onClick={searchById} disabled={loading} style={{ padding: "8px 20px", cursor: "pointer" }}>
             Buscar
           </button>
         </div>
@@ -175,7 +194,7 @@ export default function VehiculosCrud() {
         )}
       </div>
 
-      {/* Formulario */}
+      {/* Modal del Formulario */}
       {showForm && (
         <div style={{ 
           position: "fixed", 
@@ -199,42 +218,155 @@ export default function VehiculosCrud() {
             width: "100%"
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
-              <h3>{editingItem ? "Editar Vehículo" : "Nuevo Vehículo"}</h3>
-              <button onClick={() => setShowForm(false)} style={{ background: "none", border: "none", fontSize: 20 }}>×</button>
+              <h3>{editingItem ? `Editar Vehículo` : "Nuevo Vehículo"}</h3>
+              <button onClick={() => setShowForm(false)} style={{ background: "none", border: "none", fontSize: 24, cursor: "pointer" }}>
+                ×
+              </button>
             </div>
             
-            <div style={{ marginBottom: 15 }}>
-              <label>Tipo de Vehículo</label>
-              <select 
-                value={tipoVehiculo} 
-                onChange={(e) => setTipoVehiculo(e.target.value)}
-                style={{ width: "100%", padding: 8, marginTop: 5 }}
-              >
-                <option value="bicicleta">Bicicleta</option>
-                <option value="moto">Moto</option>
-              </select>
-            </div>
-            
-            {tipoVehiculo === "bicicleta" ? (
-              <BicicletaForm 
-                onSubmit={handleSubmit}
-                initialData={editingItem?.detalles}
-                onCancel={() => setShowForm(false)}
-                tipo={tipoVehiculo}
-              />
-            ) : (
-              <MotoForm 
-                onSubmit={handleSubmit}
-                initialData={editingItem?.detalles}
-                onCancel={() => setShowForm(false)}
-                tipo={tipoVehiculo}
-              />
-            )}
+            <form onSubmit={handleSubmit}>
+              {/* Tipo de vehículo - solo visible en creación */}
+              {!editingItem && (
+                <div style={{ marginBottom: 15 }}>
+                  <label>Tipo de Vehículo *</label>
+                  <select
+                    name="tipo"
+                    value={formData.tipo}
+                    onChange={handleChange}
+                    style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                  >
+                    <option value="bicicleta">🚲 Bicicleta</option>
+                    <option value="moto">🏍️ Moto</option>
+                  </select>
+                </div>
+              )}
+              
+              <div style={{ marginBottom: 15 }}>
+                <label>Centro de Formación ID *</label>
+                <input
+                  type="number"
+                  name="id_centro_de_formacion"
+                  value={formData.id_centro_de_formacion}
+                  onChange={handleChange}
+                  required
+                  style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                />
+              </div>
+              
+              <div style={{ marginBottom: 15 }}>
+                <label>Marca *</label>
+                <input
+                  type="text"
+                  name="marca"
+                  value={formData.marca}
+                  onChange={handleChange}
+                  required
+                  style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                />
+              </div>
+              
+              <div style={{ marginBottom: 15 }}>
+                <label>Color</label>
+                <input
+                  type="text"
+                  name="color"
+                  value={formData.color}
+                  onChange={handleChange}
+                  style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                />
+              </div>
+              
+              <div style={{ marginBottom: 15 }}>
+                <label>Serial *</label>
+                <input
+                  type="text"
+                  name="serial"
+                  value={formData.serial}
+                  onChange={handleChange}
+                  required
+                  style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                />
+              </div>
+              
+              {/* Campos específicos para moto */}
+              {formData.tipo === "moto" && (
+                <>
+                  <div style={{ marginBottom: 15 }}>
+                    <label>Placa *</label>
+                    <input
+                      type="text"
+                      name="placa"
+                      value={formData.placa}
+                      onChange={handleChange}
+                      required
+                      style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                    />
+                  </div>
+                  
+                  <div style={{ marginBottom: 15 }}>
+                    <label>Cilindraje</label>
+                    <input
+                      type="text"
+                      name="cilindraje"
+                      value={formData.cilindraje}
+                      onChange={handleChange}
+                      placeholder="Ej: 200cc"
+                      style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                    />
+                  </div>
+                  
+                  <div style={{ marginBottom: 15 }}>
+                    <label>Modelo</label>
+                    <input
+                      type="text"
+                      name="modelo"
+                      value={formData.modelo}
+                      onChange={handleChange}
+                      placeholder="Ej: 2023"
+                      style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                    />
+                  </div>
+                </>
+              )}
+              
+              <div style={{ marginBottom: 15 }}>
+                <label>URL Foto Principal</label>
+                <input
+                  type="text"
+                  name="foto_principal"
+                  value={formData.foto_principal}
+                  onChange={handleChange}
+                  placeholder="https://ejemplo.com/foto.jpg"
+                  style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                />
+              </div>
+              
+              <div style={{ marginBottom: 15 }}>
+                <label>URL Foto Secundaria</label>
+                <input
+                  type="text"
+                  name="foto_secundaria"
+                  value={formData.foto_secundaria}
+                  onChange={handleChange}
+                  placeholder="https://ejemplo.com/foto2.jpg"
+                  style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
+                />
+              </div>
+              
+              <div style={{ display: "flex", gap: 10 }}>
+                <button type="submit" disabled={loading} style={{ padding: "10px 20px", background: "#007bff", color: "white", border: "none", borderRadius: 4, cursor: "pointer" }}>
+                  {loading ? "Guardando..." : "Guardar"}
+                </button>
+                <button type="button" onClick={() => setShowForm(false)} style={{ padding: "10px 20px", background: "#6c757d", color: "white", border: "none", borderRadius: 4, cursor: "pointer" }}>
+                  Cancelar
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
 
-      {/* Listado */}
+      {/* Tabla de vehículos */}
       <div style={{ overflowX: "auto" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", background: "white", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
           <thead style={{ background: "#f8f9fa" }}>
@@ -242,35 +374,31 @@ export default function VehiculosCrud() {
               <th style={{ padding: 12, textAlign: "left", borderBottom: "2px solid #dee2e6" }}>ID</th>
               <th style={{ padding: 12, textAlign: "left", borderBottom: "2px solid #dee2e6" }}>Tipo</th>
               <th style={{ padding: 12, textAlign: "left", borderBottom: "2px solid #dee2e6" }}>Marca</th>
-              <th style={{ padding: 12, textAlign: "left", borderBottom: "2px solid #dee2e6" }}>Color</th>
+              <th style={{ padding: 12, textAlign: "left", borderBottom: "2px solid #dee2e6" }}>Color/Placa</th>
               <th style={{ padding: 12, textAlign: "left", borderBottom: "2px solid #dee2e6" }}>Serial</th>
-              <th style={{ padding: 12, textAlign: "left", borderBottom: "2px solid #dee2e6" }}>Centro Formación</th>
+              <th style={{ padding: 12, textAlign: "left", borderBottom: "2px solid #dee2e6" }}>Centro</th>
               <th style={{ padding: 12, textAlign: "left", borderBottom: "2px solid #dee2e6" }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => (
-              <tr key={item.id_vehiculo} style={{ borderBottom: "1px solid #dee2e6" }}>
-                <td>{item.id_vehiculo}</td>
-                <td>{item.tipo === "bicicleta" ? "🚲 Bicicleta" : "🏍️ Moto"}</td>
-                <td>{item.detalles?.marca_de_la_bicicleta || item.detalles?.marca_de_la_moto || "-"}</td>
-                <td>{item.detalles?.color_de_la_bicicleta || item.detalles?.color_de_la_moto || "-"}</td>
-                <td>{item.detalles?.serial_de_la_bicicleta || item.detalles?.placa || "-"}</td>
-                <td>{item.id_centro_de_formacion}</td>
-                <td>
+              <tr key={item.id} style={{ borderBottom: "1px solid #dee2e6" }}>
+                <td style={{ padding: 12 }}>{item.id}</td>
+                <td style={{ padding: 12 }}>{item.tipo === "bicicleta" ? "🚲 Bicicleta" : "🏍️ Moto"}</td>
+                <td style={{ padding: 12 }}>{item.marca}</td>
+                <td style={{ padding: 12 }}>{item.tipo === "moto" ? item.placa : item.color}</td>
+                <td style={{ padding: 12 }}>{item.serial}</td>
+                <td style={{ padding: 12 }}>{item.id_centro_de_formacion}</td>
+                <td style={{ padding: 12 }}>
                   <button 
-                    onClick={() => {
-                      setEditingItem(item);
-                      setTipoVehiculo(item.tipo);
-                      setShowForm(true);
-                    }}
-                    style={{ marginRight: 10, padding: "5px 10px", background: "#28a745", color: "white", border: "none", borderRadius: 3 }}
+                    onClick={() => openEditForm(item)}
+                    style={{ marginRight: 10, padding: "5px 10px", background: "#28a745", color: "white", border: "none", borderRadius: 3, cursor: "pointer" }}
                   >
                     Editar
                   </button>
                   <button 
                     onClick={() => handleDelete(item)}
-                    style={{ padding: "5px 10px", background: "#dc3545", color: "white", border: "none", borderRadius: 3 }}
+                    style={{ padding: "5px 10px", background: "#dc3545", color: "white", border: "none", borderRadius: 3, cursor: "pointer" }}
                   >
                     Eliminar
                   </button>

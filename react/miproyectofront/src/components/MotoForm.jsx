@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function MotoForm({ onSubmit, initialData, onCancel, tipo }) {
+export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEditing }) {
   const [formData, setFormData] = useState({
     tipo: tipo,
     id_centro_de_formacion: initialData?.id_centro_de_formacion || "",
