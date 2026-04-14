@@ -1,27 +1,34 @@
+// Importa useState para manejar datos del formulario
 import { useState } from "react";
 
+// Componente de formulario para bicicletas
 export default function BicicletaForm({ onSubmit, initialData, onCancel, tipo, isEditing }) {
+ 
+  // Estado local con los datos del formulario
   const [formData, setFormData] = useState({
-    tipo: tipo,
-    id_centro_de_formacion: initialData?.id_centro_de_formacion || "",
-    foto_de_la_bicicleta: initialData?.foto_de_la_bicicleta || "",
-    foto_serial_bicicleta: initialData?.foto_serial_bicicleta || "",
-    marca_de_la_bicicleta: initialData?.marca_de_la_bicicleta || "",
-    color_de_la_bicicleta: initialData?.color_de_la_bicicleta || "",
-    serial_de_la_bicicleta: initialData?.serial_de_la_bicicleta || ""
+    tipo: tipo,                                      // "bicicleta"
+    id_centro_de_formacion: initialData?.id_centro_de_formacion || "",  // ID del centro
+    foto_de_la_bicicleta: initialData?.foto_de_la_bicicleta || "",      // URL foto principal
+    foto_serial_bicicleta: initialData?.foto_serial_bicicleta || "",    // URL foto serial
+    marca_de_la_bicicleta: initialData?.marca_de_la_bicicleta || "",    // Marca
+    color_de_la_bicicleta: initialData?.color_de_la_bicicleta || "",    // Color
+    serial_de_la_bicicleta: initialData?.serial_de_la_bicicleta || ""   // Serial único
   });
 
+  // Actualiza el estado cuando el usuario escribe en un campo
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Cuando se envía el formulario
   const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
+    e.preventDefault();      // Evita que recargue la página
+    onSubmit(formData);      // Envía los datos al padre
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {/* Campo: Centro de Formación */}
       <div style={{ marginBottom: 15 }}>
         <label>Centro de Formación ID *</label>
         <input
@@ -29,11 +36,12 @@ export default function BicicletaForm({ onSubmit, initialData, onCancel, tipo, i
           name="id_centro_de_formacion"
           value={formData.id_centro_de_formacion}
           onChange={handleChange}
-          required
+          required  // Campo obligatorio
           style={{ width: "100%", padding: 8, marginTop: 5, border: "1px solid #ddd", borderRadius: 4 }}
         />
       </div>
 
+      {/* Campo: Marca */}
       <div style={{ marginBottom: 15 }}>
         <label>Marca *</label>
         <input
@@ -46,6 +54,7 @@ export default function BicicletaForm({ onSubmit, initialData, onCancel, tipo, i
         />
       </div>
 
+      {/* Campo: Color */}
       <div style={{ marginBottom: 15 }}>
         <label>Color *</label>
         <input
@@ -58,6 +67,7 @@ export default function BicicletaForm({ onSubmit, initialData, onCancel, tipo, i
         />
       </div>
 
+      {/* Campo: Serial */}
       <div style={{ marginBottom: 15 }}>
         <label>Serial *</label>
         <input
@@ -70,6 +80,7 @@ export default function BicicletaForm({ onSubmit, initialData, onCancel, tipo, i
         />
       </div>
 
+      {/* Campo: Foto bicicleta (opcional) */}
       <div style={{ marginBottom: 15 }}>
         <label>URL Foto de la bicicleta</label>
         <input
@@ -82,6 +93,7 @@ export default function BicicletaForm({ onSubmit, initialData, onCancel, tipo, i
         />
       </div>
 
+      {/* Campo: Foto serial (opcional) */}
       <div style={{ marginBottom: 15 }}>
         <label>URL Foto del serial</label>
         <input
@@ -94,6 +106,7 @@ export default function BicicletaForm({ onSubmit, initialData, onCancel, tipo, i
         />
       </div>
 
+      {/* Botones */}
       <div style={{ display: "flex", gap: 10 }}>
         <button type="submit" style={{ padding: "10px 20px", background: "#007bff", color: "white", border: "none", borderRadius: 4 }}>
           Guardar

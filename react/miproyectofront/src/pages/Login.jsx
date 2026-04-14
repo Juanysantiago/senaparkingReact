@@ -3,7 +3,7 @@ import { axiosClient } from "../api/axiosClient";
 
 export default function Login() {
   const [email, setEmail] = useState("angel@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 

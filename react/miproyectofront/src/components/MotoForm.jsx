@@ -1,24 +1,30 @@
+// Importa useState para manejar datos del formulario
 import { useState } from "react";
 
+// Componente de formulario para motos
 export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEditing }) {
+ 
+  // Estado local con los datos de la moto
   const [formData, setFormData] = useState({
-    tipo: tipo,
+    tipo: tipo,                                          // "moto"
     id_centro_de_formacion: initialData?.id_centro_de_formacion || "",
-    foto_moto: initialData?.foto_moto || "",
-    foto_placa_moto: initialData?.foto_placa_moto || "",
-    tarjeta_de_propiedad_moto: initialData?.tarjeta_de_propiedad_moto || "",
-    soat_y_tecnoc_mecanica_vigentes: initialData?.soat_y_tecnoc_mecanica_vigentes || "",
-    marca_de_la_moto: initialData?.marca_de_la_moto || "",
-    cilindraje_moto: initialData?.cilindraje_moto || "",
-    color_de_la_moto: initialData?.color_de_la_moto || "",
-    modelo_de_la_moto: initialData?.modelo_de_la_moto || "",
-    placa: initialData?.placa || ""
+    foto_moto: initialData?.foto_moto || "",             // URL foto de la moto
+    foto_placa_moto: initialData?.foto_placa_moto || "", // URL foto placa
+    tarjeta_de_propiedad_moto: initialData?.tarjeta_de_propiedad_moto || "", // URL tarjeta
+    soat_y_tecnoc_mecanica_vigentes: initialData?.soat_y_tecnoc_mecanica_vigentes || "", // SI/NO
+    marca_de_la_moto: initialData?.marca_de_la_moto || "",     // Marca
+    cilindraje_moto: initialData?.cilindraje_moto || "",       // Cilindraje (ej: 200cc)
+    color_de_la_moto: initialData?.color_de_la_moto || "",     // Color
+    modelo_de_la_moto: initialData?.modelo_de_la_moto || "",   // Año del modelo
+    placa: initialData?.placa || ""                           // Placa del vehículo
   });
 
+  // Actualiza el estado cuando el usuario escribe
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Cuando se envía el formulario
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
@@ -26,6 +32,7 @@ export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEdit
 
   return (
     <form onSubmit={handleSubmit}>
+      {/* Campo: Centro de Formación */}
       <div style={{ marginBottom: 15 }}>
         <label>Centro de Formación ID *</label>
         <input
@@ -38,6 +45,7 @@ export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEdit
         />
       </div>
 
+      {/* Campo: Marca */}
       <div style={{ marginBottom: 15 }}>
         <label>Marca *</label>
         <input
@@ -50,6 +58,7 @@ export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEdit
         />
       </div>
 
+      {/* Campo: Placa (obligatorio para motos) */}
       <div style={{ marginBottom: 15 }}>
         <label>Placa *</label>
         <input
@@ -62,6 +71,7 @@ export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEdit
         />
       </div>
 
+      {/* Campo: Cilindraje */}
       <div style={{ marginBottom: 15 }}>
         <label>Cilindraje</label>
         <input
@@ -74,6 +84,7 @@ export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEdit
         />
       </div>
 
+      {/* Campo: Color */}
       <div style={{ marginBottom: 15 }}>
         <label>Color</label>
         <input
@@ -85,6 +96,7 @@ export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEdit
         />
       </div>
 
+      {/* Campo: Modelo */}
       <div style={{ marginBottom: 15 }}>
         <label>Modelo</label>
         <input
@@ -97,6 +109,7 @@ export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEdit
         />
       </div>
 
+      {/* Campos de fotos (opcionales) */}
       <div style={{ marginBottom: 15 }}>
         <label>URL Foto de la moto</label>
         <input
@@ -133,6 +146,7 @@ export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEdit
         />
       </div>
 
+      {/* Campo: SOAT y Tecnomecánica */}
       <div style={{ marginBottom: 15 }}>
         <label>SOAT y Tecnomecánica vigentes</label>
         <input
@@ -145,6 +159,7 @@ export default function MotoForm({ onSubmit, initialData, onCancel, tipo, isEdit
         />
       </div>
 
+      {/* Botones */}
       <div style={{ display: "flex", gap: 10 }}>
         <button type="submit" style={{ padding: "10px 20px", background: "#007bff", color: "white", border: "none", borderRadius: 4 }}>
           Guardar
