@@ -48,6 +48,12 @@ export default function Navbar() {
   Vehículos
 </NavLink>
       </div>
+      <NavLink to="/config-gr" style={linkStyle}>
+  Configuración GR
+</NavLink>
+<NavLink to="/entrada-salida" style={linkStyle}>
+  Entrada/Salida
+</NavLink>
 
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <span style={{ fontSize: 12, color: "#444" }}>

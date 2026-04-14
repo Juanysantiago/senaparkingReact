@@ -50,5 +50,22 @@
       "foto_secundaria": "",
       "id": 3
     }
+  ],
+  "config_gr": [
+    {
+      "id": 1,
+      "art_direccion_gr": "Centro de Formación Norte",
+      "fecha_conexion": "2024-01-15",
+      "id_calcular": 101
+    }
+  ],
+  "entrada_salida_aprendiz": [
+    {
+      "id": 1,
+      "hora_entrada": "2024-01-20T08:00:00.000Z",
+      "hora_salida": "2026-04-14T00:01:46.486Z",
+      "id_aprendiz": 1001,
+      "id_codigo_gr": 1
+    }
   ]
 }
